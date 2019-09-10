@@ -14,6 +14,7 @@ var listItem, listingData;
 /* Connect to your database using mongoose - remember to keep your key secret*/
 //see https://mongoosejs.com/docs/connections.html
 //See https://docs.atlas.mongodb.com/driver-connection/
+mongoose.connect(config.db.uri);
 
 /* 
   Instantiate a mongoose model for each listing object in the JSON file, 
@@ -27,18 +28,27 @@ fs.readFile('listings.json', 'utf8', function(err, data) {
     throw err;
   }
   else {
-    //Save the sate in the listingData variable already defined
-    listingData = data;
+    //Save the data in the listingData variable already defined
+    var temp = JSON.parse(data);
+    listingData = temp.entries;
   }
-
-  listingData.array.forEach(element => {
+  
+  listingData.forEach(function(listing) {
     listItem = Listing({
-      name: request.name,
-      
-    })
+      name: listing.name,
+      code: listing.code,
+      coordinates: listing.coordinates,
+      address: listing.address
+    });
+    listItem.save(function(err) {
+      if(err){
+        throw err;
+      }
+    });
+    console.log(listItem);
   });
-
+});
 /*  
   Check to see if it works: Once you've written + run the script, check out your MongoLab database to ensure that 
   it saved everything correctly. 
- */
+*/

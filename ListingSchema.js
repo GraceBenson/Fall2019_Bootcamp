@@ -10,12 +10,11 @@ var listingSchema = new Schema({
   /* Your code for a schema here */ 
   //Check out - https://mongoosejs.com/docs/guide.html
 
-  name: String,
-  code: String,
-  id: String,
+  name: {type: String, required: true}, 
+  code: {type: String, required: true},
   coordinates: {
-    Latitude: Number,
-    Longitude: Number
+    latitude: Number,
+    longitude: Number
   },
   address: String,
   created_at: Date,
